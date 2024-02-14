@@ -1,4 +1,4 @@
-package com.teovladusic.skratchassignment.ui.theme
+package com.teovladusic.core.designsystem.theme
 
 import android.app.Activity
 import android.os.Build
