@@ -64,7 +64,7 @@ fun SkratchAssignmentTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = SkratchTypography,
         content = content
     )
 }

@@ -2,33 +2,68 @@ package com.teovladusic.core.designsystem.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.teovladusic.core.designsystem.R
 
 // Set of Material typography styles to start with
-val Typography = Typography(
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
+val SkratchTypography = Typography()
+
+val Typography.footnoteBook: TextStyle
+    get() = TextStyle(
+        fontSize = 12.sp,
+        fontFamily = CircularStdFontFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
     )
-    /* Other default text styles to override
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
+
+val Typography.title1Bold: TextStyle
+    get() = TextStyle(
+        fontSize = 24.sp,
+        fontFamily = CircularStdFontFamily,
+        fontWeight = FontWeight.Bold,
+    )
+
+val Typography.title1Medium: TextStyle
+    get() = TextStyle(
+        fontSize = 24.sp,
+        fontFamily = CircularStdFontFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
     )
-    */
-)
+
+val Typography.title2Book: TextStyle
+    get() = TextStyle(
+        fontSize = 20.sp,
+        fontFamily = CircularStdFontFamily,
+        fontWeight = FontWeight.Normal
+    )
+
+val Typography.largeTitleBlack: TextStyle
+    get() = TextStyle(
+        fontSize = 32.sp,
+        fontFamily = CircularStdFontFamily,
+        fontWeight = FontWeight.Black
+    )
+
+@Suppress("EXTENSION_SHADOWED_BY_MEMBER")
+val Typography.bodyMedium: TextStyle
+    get() = TextStyle(
+        fontSize = 17.sp,
+        fontFamily = CircularStdFontFamily,
+        fontWeight = FontWeight.Normal
+    )
+
+val Typography.calloutBook: TextStyle
+    get() = TextStyle(
+        fontSize = 15.sp,
+        fontFamily = CircularStdFontFamily,
+        fontWeight = FontWeight.Normal
+    )
+
+val Typography.bodyBook: TextStyle
+    get() = TextStyle(
+        fontSize = 17.sp,
+        fontFamily = CircularStdFontFamily,
+        fontWeight = FontWeight(weight = 450),
+    )
