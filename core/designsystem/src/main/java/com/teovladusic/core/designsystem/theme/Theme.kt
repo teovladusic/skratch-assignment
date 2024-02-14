@@ -1,4 +1,4 @@
-package com.teovladusic.skratchassignment.ui.theme
+package com.teovladusic.core.designsystem.theme
 
 import android.app.Activity
 import android.os.Build
@@ -16,15 +16,15 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = NewPrimary,
+    secondary = SkratchWhite,
+    tertiary = SkratchWhite
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = NewPrimary,
+    secondary = SkratchWhite,
+    tertiary = SkratchWhite
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -64,7 +64,7 @@ fun SkratchAssignmentTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = SkratchTypography,
         content = content
     )
 }
