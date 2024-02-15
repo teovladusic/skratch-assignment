@@ -54,6 +54,7 @@ android {
 
 dependencies {
     implementation(project(":core:designsystem"))
+    implementation(project(":feature:home"))
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
@@ -67,6 +68,9 @@ dependencies {
     // Dagger Hilt
     ksp(libs.dagger.hilt.compiler)
     implementation(libs.bundles.dagger.hilt)
+
+    // MapBox
+    implementation(libs.mapbox.android)
 
     testImplementation(libs.junit)
 
