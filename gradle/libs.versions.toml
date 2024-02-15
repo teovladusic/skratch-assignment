@@ -14,6 +14,10 @@ androidxComposeCompiler = "1.5.9"
 ksp = "1.9.22-1.0.17"
 dagger-hilt = "2.50"
 dagger-hilt-navigation-compose = "1.1.0"
+retrofit = "2.9.0"
+retrofit-okhttp = "4.12.0"
+retrofit-converter = "1.0.0"
+converter-gson = "2.9.0"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -35,6 +39,11 @@ material = { group = "com.google.android.material", name = "material", version.r
 dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "dagger-hilt" }
 dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "dagger-hilt" }
 dagger-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "dagger-hilt-navigation-compose" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofit-converter" }
+retrofit-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "retrofit-okhttp" }
+retrofit-okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "retrofit-okhttp" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converter-gson" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -45,3 +54,4 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt" }
 
 [bundles]
 dagger-hilt = ["dagger-hilt", "dagger-hilt-navigation-compose"]
+retrofit = ["retrofit", "retrofit-okhttp", "retrofit-okhttp-logging", "retrofit-converter"]
