@@ -21,11 +21,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.CameraState
 import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapboxExperimental
 import com.mapbox.maps.Style
+import com.mapbox.maps.extension.compose.MapEvents
 import com.mapbox.maps.extension.compose.MapboxMap
 import com.mapbox.maps.plugin.attribution.generated.AttributionSettings
+import com.mapbox.maps.plugin.compass.generated.CompassSettings
 import com.mapbox.maps.plugin.logo.generated.LogoSettings
 import com.mapbox.maps.plugin.scalebar.generated.ScaleBarSettings
 import com.teovladusic.core.designsystem.theme.title1Medium
@@ -41,7 +45,11 @@ internal fun HomeScreen(viewModel: HomeViewModel) {
 
     Box(modifier = Modifier.fillMaxSize()) {
         when (state.friendsViewType) {
-            HomeFriendsViewType.Map -> FriendsMapView()
+            HomeFriendsViewType.Map -> FriendsMapView(
+                cameraState = viewModel.mapCameraState,
+                onCameraStateChanged = viewModel::onCameraStateChanged
+            )
+
             HomeFriendsViewType.List -> FriendsListView()
         }
 
@@ -64,13 +72,29 @@ internal fun HomeScreen(viewModel: HomeViewModel) {
 
 @OptIn(MapboxExperimental::class)
 @Composable
-private fun FriendsMapView() {
+private fun FriendsMapView(cameraState: CameraState, onCameraStateChanged: (CameraState) -> Unit) {
     MapboxMap(
         modifier = Modifier.fillMaxSize(),
-        mapInitOptionsFactory = { MapInitOptions(context = it, styleUri = Style.MAPBOX_STREETS) },
+        mapInitOptionsFactory = {
+            MapInitOptions(
+                context = it,
+                styleUri = Style.MAPBOX_STREETS,
+                cameraOptions = CameraOptions.Builder()
+                    .center(cameraState.center)
+                    .padding(cameraState.padding)
+                    .zoom(cameraState.zoom)
+                    .bearing(cameraState.bearing)
+                    .pitch(cameraState.pitch)
+                    .build()
+            )
+        },
         logoSettings = LogoSettings { enabled = false },
         attributionSettings = AttributionSettings { enabled = false },
-        scaleBarSettings = ScaleBarSettings { enabled = false }
+        scaleBarSettings = ScaleBarSettings { enabled = false },
+        compassSettings = CompassSettings { enabled = false },
+        mapEvents = MapEvents(
+            onCameraChanged = { onCameraStateChanged(it.cameraState) },
+        )
     ) {
 
     }
