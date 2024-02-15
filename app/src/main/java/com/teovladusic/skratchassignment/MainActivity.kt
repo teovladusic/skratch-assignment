@@ -8,7 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.teovladusic.core.designsystem.theme.SkratchAssignmentTheme
-import com.teovladusic.feature.home.HomeScreen
+import com.teovladusic.skratchassignment.navigation.SkratchAssignmentNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    HomeScreen()
+                    SkratchAssignmentNavHost()
                 }
             }
         }

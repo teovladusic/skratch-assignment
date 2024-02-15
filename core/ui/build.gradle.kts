@@ -2,12 +2,10 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.hilt)
-    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.teovladusic.feature.home"
+    namespace = "com.teovladusic.core.ui"
     compileSdk = 34
 
     defaultConfig {
@@ -33,39 +31,14 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get().toString()
-    }
 }
 
 dependencies {
-    implementation(project(":core:designsystem"))
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
-    implementation(platform(libs.compose.bom))
-    implementation(libs.ui)
-    implementation(libs.material3)
-
-    // MapBox
-    implementation(libs.mapbox.android)
-    implementation(libs.mapbox.compose)
-
-    // Navigation
-    implementation(libs.androidx.navigation.compose)
-
-    // Dagger Hilt
-    ksp(libs.dagger.hilt.compiler)
-    implementation(libs.bundles.dagger.hilt)
-
-    // compose lifecycle
-    implementation(libs.androidx.lifecycle.runtime.compose)
-
+    implementation(libs.material)
     testImplementation(libs.junit)
-
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }

@@ -19,6 +19,7 @@ retrofit-okhttp = "4.12.0"
 retrofit-converter = "1.0.0"
 converter-gson = "2.9.0"
 mapbox = "11.1.0"
+androidxNavigation = "2.7.7"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -47,6 +48,8 @@ retrofit-okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-inte
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converter-gson" }
 mapbox-android = { module = "com.mapbox.maps:android", version.ref = "mapbox" }
 mapbox-compose = { module = "com.mapbox.extension:maps-compose", version.ref = "mapbox" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle-runtime-ktx" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
