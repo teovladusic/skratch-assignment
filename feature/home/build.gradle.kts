@@ -11,7 +11,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -43,6 +43,8 @@ android {
 
 dependencies {
     implementation(project(":core:designsystem"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:common"))
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
@@ -63,6 +65,9 @@ dependencies {
 
     // compose lifecycle
     implementation(libs.androidx.lifecycle.runtime.compose)
+
+    // coil images
+    implementation(libs.coil.compose)
 
     testImplementation(libs.junit)
 

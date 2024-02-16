@@ -4,6 +4,8 @@ import com.android.build.api.variant.BuildConfigField
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -11,7 +13,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -50,11 +52,26 @@ androidComponents {
 }
 
 dependencies {
+    implementation(project(":core:network"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:common"))
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
+
+    // Retrofit
+    implementation(libs.bundles.retrofit)
+
+    // Dagger Hilt
+    ksp(libs.dagger.hilt.compiler)
+    implementation(libs.bundles.dagger.hilt)
+
+    // Gson
+    implementation(libs.converter.gson)
+
     testImplementation(libs.junit)
+
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }

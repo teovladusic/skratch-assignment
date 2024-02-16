@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.teovladusic.skratchassignment"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -53,7 +53,13 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:common"))
+    implementation(project(":core:data"))
     implementation(project(":core:designsystem"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:network"))
+    implementation(project(":core:ui"))
+
     implementation(project(":feature:home"))
 
     implementation(libs.core.ktx)
