@@ -19,7 +19,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -45,6 +45,7 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:domain"))
     implementation(project(":core:common"))
+    implementation(project(":core:ui"))
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
@@ -68,6 +69,11 @@ dependencies {
 
     // coil images
     implementation(libs.coil.compose)
+
+    // Lottie
+    implementation("com.airbnb.android:lottie-compose:4.0.0")
+
+    implementation("androidx.asynclayoutinflater:asynclayoutinflater:1.0.0")
 
     testImplementation(libs.junit)
 

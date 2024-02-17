@@ -8,11 +8,16 @@ import com.teovladusic.core.domain.model.Friend
 
 data class HomeUiState(
     val friends: List<Friend> = emptyList(),
-    val isLoading: Boolean = false,
-    val friendsCount: Int = 100,
+    val isFriendsLoading: Boolean = false,
+    val friendsCount: Int = DEFAULT_FRIENDS_COUNT,
     val friendsViewType: HomeFriendsViewType = HomeFriendsViewType.Map,
     val errorMessage: UiText? = null
-)
+) {
+
+    companion object {
+        const val DEFAULT_FRIENDS_COUNT = 5
+    }
+}
 
 enum class HomeFriendsViewType {
     Map, List;

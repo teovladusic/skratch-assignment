@@ -21,6 +21,7 @@ converter-gson = "2.9.0"
 mapbox = "11.1.0"
 androidxNavigation = "2.7.7"
 coil-compose = "2.5.0"
+gmsPlugin = "4.4.1"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -59,6 +60,7 @@ kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt" }
+gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin" }
 
 [bundles]
 dagger-hilt = ["dagger-hilt", "dagger-hilt-navigation-compose"]
