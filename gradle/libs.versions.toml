@@ -18,6 +18,10 @@ retrofit = "2.9.0"
 retrofit-okhttp = "4.12.0"
 retrofit-converter = "1.0.0"
 converter-gson = "2.9.0"
+mapbox = "11.1.0"
+androidxNavigation = "2.7.7"
+coil-compose = "2.5.0"
+gmsPlugin = "4.4.1"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -44,6 +48,11 @@ retrofit-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kot
 retrofit-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "retrofit-okhttp" }
 retrofit-okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "retrofit-okhttp" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converter-gson" }
+mapbox-android = { module = "com.mapbox.maps:android", version.ref = "mapbox" }
+mapbox-compose = { module = "com.mapbox.extension:maps-compose", version.ref = "mapbox" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle-runtime-ktx" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -51,6 +60,7 @@ kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt" }
+gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin" }
 
 [bundles]
 dagger-hilt = ["dagger-hilt", "dagger-hilt-navigation-compose"]

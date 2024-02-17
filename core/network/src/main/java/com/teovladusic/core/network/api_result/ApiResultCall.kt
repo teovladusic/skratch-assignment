@@ -1,5 +1,6 @@
 package com.teovladusic.core.network.api_result
 
+import com.teovladusic.core.domain.model.NetworkErrorType
 import okhttp3.Request
 import okio.Timeout
 import retrofit2.Call
@@ -17,17 +18,14 @@ internal class ApiResultCall<T>(
                 when (val code = response.code()) {
                     in 200..208 -> {
                         callback.onResponse(
-                            this@ApiResultCall,
-                            Response.success(ApiResult.Success(response.body()))
+                            this@ApiResultCall, Response.success(ApiResult.Success(response.body()))
                         )
                     }
 
                     in 400..409 -> callback.onResponse(
-                        this@ApiResultCall,
-                        Response.success(
+                        this@ApiResultCall, Response.success(
                             ApiResult.Error(
-                                code = code,
-                                networkErrorType = NetworkErrorType.fromStatusCode(code)
+                                code = code, networkErrorType = networkErrorTypeFromStatusCode(code)
                             )
                         )
                     )
@@ -37,8 +35,7 @@ internal class ApiResultCall<T>(
                             this@ApiResultCall,
                             Response.success(
                                 ApiResult.Error(
-                                    code = code,
-                                    networkErrorType = null
+                                    code = code, networkErrorType = null
                                 )
                             ),
                         )
@@ -48,8 +45,7 @@ internal class ApiResultCall<T>(
 
             override fun onFailure(call: Call<T>, throwable: Throwable) {
                 callback.onResponse(
-                    this@ApiResultCall,
-                    Response.success(ApiResult.Exception(throwable))
+                    this@ApiResultCall, Response.success(ApiResult.Exception(throwable))
                 )
                 call.cancel()
             }
@@ -70,4 +66,13 @@ internal class ApiResultCall<T>(
     override fun request(): Request = callDelegate.request()
 
     override fun timeout(): Timeout = callDelegate.timeout()
+}
+
+@Suppress("detekt.MagicNumber")
+private fun networkErrorTypeFromStatusCode(code: Int): NetworkErrorType? = when (code) {
+    400 -> NetworkErrorType.BadRequest
+    401 -> NetworkErrorType.Unauthorized
+    403 -> NetworkErrorType.Forbidden
+    404 -> NetworkErrorType.NotFound
+    else -> null
 }

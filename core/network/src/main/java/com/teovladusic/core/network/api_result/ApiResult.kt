@@ -1,5 +1,7 @@
 package com.teovladusic.core.network.api_result
 
+import com.teovladusic.core.domain.model.NetworkErrorType
+
 sealed interface ApiResult<T> {
 
     /**

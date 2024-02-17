@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="my_friends">My Friends</string>
+    <string name="no_of_users">No. of users</string>
+    <string name="friends_loading_text">Finding your friends</string>
+</resources>
