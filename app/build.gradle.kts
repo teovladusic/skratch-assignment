@@ -62,6 +62,7 @@ dependencies {
     implementation(project(":core:ui"))
 
     implementation(project(":feature:home"))
+    implementation(project(":feature:friend_details"))
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
@@ -78,6 +79,9 @@ dependencies {
 
     // MapBox
     implementation(libs.mapbox.android)
+
+    // Accompanist Material navigation (sheet navigation)
+    implementation(libs.accompanist.navigation.material)
 
     testImplementation(libs.junit)
 

@@ -18,7 +18,10 @@ private val DarkColorScheme = darkColorScheme(
     inversePrimary = SkratchPaleBlue,
     onPrimaryContainer = SkratchPaleBlue50,
     onSecondary = SkratchNavy,
-    onSecondaryContainer = SkratchText
+    onSecondaryContainer = SkratchText,
+    surfaceBright = SkratchUltralight,
+    onSurface = SkratchTextDark,
+    onTertiary = SkratchNavy50
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -28,7 +31,10 @@ private val LightColorScheme = lightColorScheme(
     inversePrimary = SkratchPaleBlue,
     onPrimaryContainer = SkratchPaleBlue50,
     onSecondary = SkratchNavy,
-    onSecondaryContainer = SkratchText
+    onSecondaryContainer = SkratchText,
+    surfaceBright = SkratchUltralight,
+    onSurface = SkratchTextDark,
+    onTertiary = SkratchNavy50
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
