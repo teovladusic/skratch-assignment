@@ -2,10 +2,12 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.teovladusic.core.common"
+    namespace = "com.teovladusic.friend_details"
     compileSdk = 34
 
     defaultConfig {
@@ -17,7 +19,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -40,14 +42,30 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:domain"))
+    implementation(project(":core:common"))
+    implementation(project(":core:designsystem"))
+    implementation(project(":core:ui"))
+
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
-    implementation(libs.material)
 
-    testImplementation(libs.junit)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.material3)
 
     // Navigation
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.accompanist.navigation.material)
+
+    // Dagger Hilt
+    ksp(libs.dagger.hilt.compiler)
+    implementation(libs.bundles.dagger.hilt)
+
+    // coil images
+    implementation(libs.coil.compose)
+
+    testImplementation(libs.junit)
 
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

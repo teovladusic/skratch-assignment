@@ -5,6 +5,7 @@ import com.teovladusic.core.common.extension.toLocalDateTimeOrNull
 import com.teovladusic.core.domain.model.Friend
 
 data class NetworkUser(
+    val gender: String,
     val name: NetworkUserName,
     val location: NetworkUserLocation,
     val email: String,
@@ -20,6 +21,7 @@ fun NetworkUser.toDomain(): Friend {
         id = login.uuid,
         name = name.first,
         lastname = name.last,
+        gender = gender,
         pictureUrl = picture.large,
         username = login.username,
         age = dob.age,

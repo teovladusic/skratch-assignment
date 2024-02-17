@@ -35,6 +35,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.teovladusic.core.domain.model.Friend
 import com.teovladusic.feature.home.components.FloatingContentAnimatedVisibility
 import com.teovladusic.feature.home.components.FriendsCountContent
 import com.teovladusic.feature.home.components.FriendsListView
@@ -43,12 +44,15 @@ import com.teovladusic.feature.home.components.FriendsMapView
 import kotlin.math.abs
 
 @Composable
-internal fun HomeRoute(viewModel: HomeViewModel = hiltViewModel()) {
-    HomeScreen(viewModel)
+internal fun HomeRoute(
+    viewModel: HomeViewModel = hiltViewModel(),
+    onFriendClick: (Friend) -> Unit
+) {
+    HomeScreen(viewModel, onFriendClick)
 }
 
 @Composable
-internal fun HomeScreen(viewModel: HomeViewModel) {
+internal fun HomeScreen(viewModel: HomeViewModel, onFriendClick: (Friend) -> Unit) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     var floatingContentVisible by rememberSaveable { mutableStateOf(true) }
 
@@ -79,13 +83,15 @@ internal fun HomeScreen(viewModel: HomeViewModel) {
             HomeFriendsViewType.Map -> FriendsMapView(
                 cameraState = viewModel.mapCameraState,
                 onCameraStateChanged = viewModel::onCameraStateChanged,
-                friends = state.friends
+                friends = state.friends,
+                onFriendClick = onFriendClick
             )
 
             HomeFriendsViewType.List -> FriendsListView(
                 friends = state.friends,
                 nestedScrollConnection = nestedScrollConnection,
-                listState = listState
+                listState = listState,
+                onFriendClick = onFriendClick
             )
         }
 

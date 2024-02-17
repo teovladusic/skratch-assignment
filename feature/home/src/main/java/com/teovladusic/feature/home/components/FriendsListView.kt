@@ -1,6 +1,7 @@
 package com.teovladusic.feature.home.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,7 +38,8 @@ import com.teovladusic.core.designsystem.theme.largeTitleBlack
 internal fun FriendsListView(
     friends: List<Friend>,
     nestedScrollConnection: NestedScrollConnection,
-    listState: LazyListState
+    listState: LazyListState,
+    onFriendClick: (Friend) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -63,15 +65,17 @@ internal fun FriendsListView(
             items = friends,
             key = { it.id }
         ) {
-            FriendListItem(friend = it)
+            FriendListItem(friend = it, onFriendClick = onFriendClick)
         }
     }
 }
 
 @Composable
-private fun FriendListItem(friend: Friend) {
+private fun FriendListItem(friend: Friend, onFriendClick: (Friend) -> Unit) {
     Row(
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .clickable { onFriendClick(friend) }
+            .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(

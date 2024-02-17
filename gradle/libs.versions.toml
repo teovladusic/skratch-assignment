@@ -22,6 +22,7 @@ mapbox = "11.1.0"
 androidxNavigation = "2.7.7"
 coil-compose = "2.5.0"
 gmsPlugin = "4.4.1"
+accompanist-navigation-material = "0.35.0-alpha"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -53,6 +54,7 @@ mapbox-compose = { module = "com.mapbox.extension:maps-compose", version.ref = "
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle-runtime-ktx" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose" }
+accompanist-navigation-material = { module = "com.google.accompanist:accompanist-navigation-material", version.ref = "accompanist-navigation-material" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

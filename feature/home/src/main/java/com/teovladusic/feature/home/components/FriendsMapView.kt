@@ -1,6 +1,7 @@
 package com.teovladusic.feature.home.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -47,7 +48,8 @@ import com.teovladusic.core.domain.model.Friend
 internal fun FriendsMapView(
     cameraState: CameraState,
     onCameraStateChanged: (CameraState) -> Unit,
-    friends: List<Friend>
+    friends: List<Friend>,
+    onFriendClick: (Friend) -> Unit
 ) {
     val mapViewportState = rememberMapViewportState {
         setCameraOptions(cameraState.toCameraOptions())
@@ -84,15 +86,18 @@ internal fun FriendsMapView(
                     geometry(Point.fromLngLat(friend.longitude, friend.latitude))
                 },
             ) {
-                FriendMapCircle(friend = friend)
+                FriendMapCircle(friend = friend, onFriendClick = onFriendClick)
             }
         }
     }
 }
 
 @Composable
-private fun FriendMapCircle(friend: Friend) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+private fun FriendMapCircle(friend: Friend, onFriendClick: (Friend) -> Unit) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.clickable { onFriendClick(friend) }
+    ) {
         Text(
             text = friend.name,
             style = MaterialTheme.typography.footnoteBook,
