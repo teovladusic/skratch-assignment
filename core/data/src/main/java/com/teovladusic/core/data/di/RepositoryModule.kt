@@ -2,6 +2,7 @@ package com.teovladusic.core.data.di
 
 import com.teovladusic.core.data.repository.FriendRepositoryImpl
 import com.teovladusic.core.data.retrofit.RetrofitNetworkUserApi
+import com.teovladusic.core.domain.dispatchers.DispatcherProvider
 import com.teovladusic.core.domain.repository.FriendRepository
 import dagger.Module
 import dagger.Provides
@@ -15,6 +16,9 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideFriendRepository(api: RetrofitNetworkUserApi): FriendRepository =
-        FriendRepositoryImpl(api)
+    fun provideFriendRepository(
+        api: RetrofitNetworkUserApi,
+        dispatcherProvider: DispatcherProvider
+    ): FriendRepository =
+        FriendRepositoryImpl(api, dispatcherProvider)
 }

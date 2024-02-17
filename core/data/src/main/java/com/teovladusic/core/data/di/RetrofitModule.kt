@@ -1,19 +1,19 @@
 package com.teovladusic.core.data.di
 
 import com.google.gson.GsonBuilder
+import com.teovladusic.core.data.BuildConfig
+import com.teovladusic.core.data.retrofit.RetrofitNetworkUserApi
+import com.teovladusic.core.network.api_result.ApiResultAdapterFactory
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import java.util.concurrent.TimeUnit
-import com.teovladusic.core.data.BuildConfig
-import com.teovladusic.core.data.retrofit.RetrofitNetworkUserApi
-import com.teovladusic.core.network.api_result.ApiResultAdapterFactory
-import dagger.Provides
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module

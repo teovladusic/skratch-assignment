@@ -19,7 +19,8 @@
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/friend_details" />
-            <option value="$PROJECT_DIR$/feature/home" />
+            <option value="$PROJECT_DIR$/feature/friends_list_view" />
+            <option value="$PROJECT_DIR$/feature/friends_map_view" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

@@ -61,8 +61,9 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:ui"))
 
-    implementation(project(":feature:home"))
     implementation(project(":feature:friend_details"))
+    implementation(project(":feature:friends_map_view"))
+    implementation(project(":feature:friends_list_view"))
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
@@ -82,6 +83,9 @@ dependencies {
 
     // Accompanist Material navigation (sheet navigation)
     implementation(libs.accompanist.navigation.material)
+
+    // compose lifecycle
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
     testImplementation(libs.junit)
 
