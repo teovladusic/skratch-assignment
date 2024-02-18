@@ -37,7 +37,7 @@ import com.teovladusic.core.domain.model.Friend
 @Composable
 internal fun FriendsListViewRoute(
     viewModel: FriendsListViewModel = hiltViewModel(),
-    onFriendClick: (Friend) -> Unit
+    onFriendClick: (String) -> Unit
 ) {
     FriendsListViewScreen(viewModel, onFriendClick)
 }
@@ -45,7 +45,7 @@ internal fun FriendsListViewRoute(
 @Composable
 internal fun FriendsListViewScreen(
     viewModel: FriendsListViewModel,
-    onFriendClick: (Friend) -> Unit
+    onFriendClick: (String) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -77,10 +77,10 @@ internal fun FriendsListViewScreen(
 }
 
 @Composable
-private fun FriendListItem(friend: Friend, onFriendClick: (Friend) -> Unit) {
+private fun FriendListItem(friend: Friend, onFriendClick: (String) -> Unit) {
     Row(
         modifier = Modifier
-            .clickable { onFriendClick(friend) }
+            .clickable { onFriendClick(friend.id) }
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

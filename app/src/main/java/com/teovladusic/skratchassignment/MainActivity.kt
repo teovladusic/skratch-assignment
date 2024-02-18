@@ -7,16 +7,21 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
@@ -42,6 +47,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -51,9 +57,15 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.teovladusic.core.common.R
+import com.teovladusic.core.designsystem.components.SimpleErrorDialog
 import com.teovladusic.core.designsystem.components.SkratchNumberField
 import com.teovladusic.core.designsystem.icon.SkratchAssignmentIcons
 import com.teovladusic.core.designsystem.theme.SkratchAssignmentTheme
@@ -82,6 +94,15 @@ class MainActivity : ComponentActivity() {
                 val backStackEntry = navController.currentBackStackEntryAsState()
 
                 val friendsData by viewModel.friendsData.collectAsStateWithLifecycle()
+                val state by viewModel.state.collectAsStateWithLifecycle()
+
+                state.errorMessage?.let {
+                    SimpleErrorDialog(
+                        title = stringResource(id = R.string.error),
+                        text = it.getString(this),
+                        onDismissRequest = viewModel::dismissError
+                    )
+                }
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -117,6 +138,8 @@ class MainActivity : ComponentActivity() {
                                 },
                             )
                         }
+
+                        LoadingIndicator(isLoading = state.isLoading)
                     }
                 }
             }
@@ -140,6 +163,36 @@ class MainActivity : ComponentActivity() {
         when (topLevelDestination) {
             TopLevelDestination.FriendsMap -> navigateToFriendsMap(topLevelNavOptions)
             TopLevelDestination.FriendsList -> navigateToFriendsList(topLevelNavOptions)
+        }
+    }
+}
+
+@Composable
+private fun LoadingIndicator(isLoading: Boolean) {
+    AnimatedVisibility(
+        visible = isLoading,
+        enter = slideInVertically(initialOffsetY = { fullHeight -> -fullHeight }),
+        exit = slideOutVertically(targetOffsetY = { fullHeight -> -fullHeight })
+    ) {
+        Box(
+            modifier = Modifier
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .padding(horizontal = 16.dp)
+                .background(MaterialTheme.colorScheme.secondary, shape = RoundedCornerShape(8.dp))
+                .fillMaxWidth()
+        ) {
+            val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_lottie))
+            val progress by animateLottieCompositionAsState(
+                composition,
+                iterations = LottieConstants.IterateForever
+            )
+            LottieAnimation(
+                composition = composition,
+                progress = { progress },
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(80.dp),
+            )
         }
     }
 }
@@ -313,7 +366,9 @@ private fun CountButton(showNumberOfUsersField: Boolean, count: Int, onClick: ()
             Text(
                 text = count.toString(),
                 style = MaterialTheme.typography.title1Medium,
-                color = MaterialTheme.colorScheme.onSecondary
+                color = MaterialTheme.colorScheme.onSecondary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }

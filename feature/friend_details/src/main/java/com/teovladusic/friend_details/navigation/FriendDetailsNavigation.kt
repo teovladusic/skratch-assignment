@@ -1,29 +1,42 @@
 package com.teovladusic.friend_details.navigation
 
-import android.os.Build
-import androidx.core.os.bundleOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
-import com.teovladusic.core.common.extension.navigate
-import com.teovladusic.core.domain.model.Friend
 import com.teovladusic.friend_details.FriendDetailsRoute
+import java.net.URLDecoder
+import java.net.URLEncoder
 
 const val FRIEND_DETAILS_ROUTE = "friend_details_route"
-internal const val FRIEND_ARG = "friend"
+internal const val FRIEND_ID_ARG = "friend_id"
 
-fun NavController.navigateToFriendDetails(friend: Friend) {
-    navigate(FRIEND_DETAILS_ROUTE, args = bundleOf(FRIEND_ARG to friend))
+internal class FriendDetailsArgs(val friendId: String) {
+    constructor(savedStateHandle: SavedStateHandle) :
+            this(
+                URLDecoder.decode(
+                    checkNotNull(savedStateHandle[FRIEND_ID_ARG]),
+                    Charsets.UTF_8.name()
+                )
+            )
+}
+
+fun NavController.navigateToFriendDetails(friendId: String) {
+    val encodedId = URLEncoder.encode(friendId, Charsets.UTF_8.name())
+    navigate("$FRIEND_DETAILS_ROUTE/$encodedId")
 }
 
 @OptIn(ExperimentalMaterialNavigationApi::class)
 fun NavGraphBuilder.friendDetailsSheet() {
-    bottomSheet(FRIEND_DETAILS_ROUTE) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            FriendDetailsRoute(friend = it.arguments?.getParcelable(FRIEND_ARG, Friend::class.java))
-        } else {
-            FriendDetailsRoute(friend = it.arguments?.getParcelable(FRIEND_ARG))
-        }
+    bottomSheet(
+        "$FRIEND_DETAILS_ROUTE/{$FRIEND_ID_ARG}",
+        arguments = listOf(
+            navArgument(FRIEND_ID_ARG) { type = NavType.StringType }
+        )
+    ) {
+        FriendDetailsRoute()
     }
 }

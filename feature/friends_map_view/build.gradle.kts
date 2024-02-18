@@ -48,6 +48,7 @@ dependencies {
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
+    implementation(libs.material)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
     implementation(libs.material3)
@@ -68,6 +69,9 @@ dependencies {
 
     // coil images
     implementation(libs.coil.compose)
+
+    // Glide images
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 
     testImplementation(libs.junit)
 

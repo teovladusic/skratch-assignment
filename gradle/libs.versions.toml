@@ -23,6 +23,7 @@ androidxNavigation = "2.7.7"
 coil-compose = "2.5.0"
 gmsPlugin = "4.4.1"
 accompanist-navigation-material = "0.35.0-alpha"
+lottie = "6.3.0"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -55,6 +56,7 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle-runtime-ktx" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose" }
 accompanist-navigation-material = { module = "com.google.accompanist:accompanist-navigation-material", version.ref = "accompanist-navigation-material" }
+lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -18,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,6 +29,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.teovladusic.core.common.extension.format
 import com.teovladusic.core.designsystem.R
@@ -39,12 +42,14 @@ import com.teovladusic.core.domain.model.Friend
 import com.teovladusic.core.ui.AndroidIntentLauncher
 
 @Composable
-internal fun FriendDetailsRoute(friend: Friend?) {
-    FriendDetailsSheet(friend)
+internal fun FriendDetailsRoute(viewModel: FriendDetailsViewModel = hiltViewModel()) {
+    FriendDetailsSheet(viewModel)
 }
 
 @Composable
-internal fun FriendDetailsSheet(friend: Friend?) {
+internal fun FriendDetailsSheet(viewModel: FriendDetailsViewModel) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -55,6 +60,8 @@ internal fun FriendDetailsSheet(friend: Friend?) {
         SkratchSheetDragHandle()
 
         Spacer(modifier = Modifier.height(24.dp))
+
+        val friend = state.friend
 
         if (friend == null) {
             Text(text = "An error occurred")

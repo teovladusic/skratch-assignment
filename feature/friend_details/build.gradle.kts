@@ -65,6 +65,9 @@ dependencies {
     // coil images
     implementation(libs.coil.compose)
 
+    // compose lifecycle
+    implementation(libs.androidx.lifecycle.runtime.compose)
+
     testImplementation(libs.junit)
 
     androidTestImplementation(libs.androidx.test.ext.junit)
