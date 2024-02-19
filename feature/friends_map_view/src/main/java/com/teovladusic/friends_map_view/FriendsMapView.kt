@@ -3,13 +3,10 @@ package com.teovladusic.friends_map_view
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.os.Handler
-import android.os.Looper
 import android.util.AttributeSet
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.asynclayoutinflater.view.AsyncLayoutInflater
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.mapbox.geojson.Feature
@@ -37,7 +34,9 @@ import com.mapbox.maps.plugin.scalebar.scalebar
 import com.mapbox.maps.toCameraOptions
 import com.mapbox.maps.viewannotation.annotatedLayerFeature
 import com.mapbox.maps.viewannotation.viewAnnotationOptions
-import com.teovladusic.core.common.extension.findActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class FriendsMapView(
     context: Context,
@@ -45,16 +44,20 @@ class FriendsMapView(
 ) : MapView(context, attrs) {
 
     private var clickListener: FriendsMapViewClickListener? = null
+    private var coroutineScope: CoroutineScope? = null
+    private val asyncInflater = AsyncLayoutInflater(context)
 
     constructor(
         context: Context,
         cameraState: CameraState,
         clickListener: FriendsMapViewClickListener,
-        cameraChangedCallback: CameraChangedCallback
+        cameraChangedCallback: CameraChangedCallback,
+        coroutineScope: CoroutineScope
     ) : this(context, null) {
         mapboxMap.setCamera(cameraState.toCameraOptions())
         mapboxMap.subscribeCameraChanged(cameraChangedCallback)
         this.clickListener = clickListener
+        this.coroutineScope = coroutineScope
     }
 
     companion object {
@@ -73,18 +76,11 @@ class FriendsMapView(
         configureMapElements()
         mapboxMap.loadStyle(Style.OUTDOORS) { style ->
             style.setProjection(Projection(ProjectionName.MERCATOR))
+
+            style.clear()
+            style.addUpdateGeoJsonSource(features)
             style.addSymbolLayerIfNeeded()
-
-            if (features.isNotEmpty()) {
-                val handler = Handler(Looper.getMainLooper())
-
-                // Delay drawing annotations (can lead to UI freezing) to let map load and have
-                // smoother navigation
-                handler.postDelayed({
-                    style.addUpdateGeoJsonSource(features)
-                    addViewAnnotations(features)
-                }, 1_000)
-            }
+            addViewAnnotations(features)
         }
     }
 
@@ -113,10 +109,12 @@ class FriendsMapView(
 
     private fun Style.addSymbolLayerIfNeeded() {
         if (getLayer(UNCLUSTERED_LAYER_ID) != null) return
+        if (getLayer(CLUSTERED_LAYER_ID) != null) return
 
         val unclusteredSymbolLayer = SymbolLayer(UNCLUSTERED_LAYER_ID, SOURCE_ID)
         unclusteredSymbolLayer.textField(".") // Must have value to be shown
         unclusteredSymbolLayer.textSize(0.1)
+        unclusteredSymbolLayer.filter(Expression.not(Expression.has("point_count")))
         addLayer(unclusteredSymbolLayer)
 
         val clusteredSymbolLayer = SymbolLayer(CLUSTERED_LAYER_ID, SOURCE_ID)
@@ -176,44 +174,37 @@ class FriendsMapView(
     }
 
     private fun addViewAnnotations(features: List<Feature>) {
-        features.forEach { feature ->
-            viewAnnotationManager.addViewAnnotation(
-                inflateView(feature),
-                options = viewAnnotationOptions {
-                    annotatedLayerFeature(UNCLUSTERED_LAYER_ID) {
-                        featureId(feature.id())
+        coroutineScope?.launch(Dispatchers.Default) {
+            features.forEach { feature ->
+                viewAnnotationManager.addViewAnnotation(
+                    R.layout.view_annotation,
+                    options = viewAnnotationOptions {
+                        annotatedLayerFeature(UNCLUSTERED_LAYER_ID) {
+                            featureId(feature.id())
+                        }
+                    },
+                    asyncInflater = asyncInflater,
+                    asyncInflateCallback = { view ->
+                        val textView = view.findViewById<TextView>(R.id.text)
+                        val imageView = view.findViewById<ImageView>(R.id.image)
+
+                        textView.text = feature.getStringProperty("name")
+
+                        Glide.with(context)
+                            .load(feature.getStringProperty("image"))
+                            .centerCrop()
+                            .into(imageView)
+
+                        clickListener?.let { clickListener ->
+                            val id = feature.id() ?: return@let
+                            view.setOnClickListener {
+                                clickListener.onFriendClick(id)
+                            }
+                        }
                     }
-                }
-            )
-        }
-    }
-
-    private fun inflateView(feature: Feature): View {
-        val activity = context.findActivity()
-
-        val view = activity.layoutInflater.inflate(R.layout.view_annotation, this, false)
-        view.layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        val text = view.findViewById<TextView>(R.id.text)
-        val image = view.findViewById<ImageView>(R.id.image)
-
-        text.text = feature.getStringProperty("name")
-
-        Glide.with(activity.baseContext)
-            .load(feature.getStringProperty("image"))
-            .centerCrop()
-            .into(image)
-
-        clickListener?.let { clickListener ->
-            val id = feature.id() ?: return@let
-            view.setOnClickListener {
-                clickListener.onFriendClick(id)
+                )
             }
         }
-
-        return view
     }
 }
 

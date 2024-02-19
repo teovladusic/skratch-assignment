@@ -2,8 +2,8 @@ package com.teovladusic.core.data.di
 
 import com.google.gson.GsonBuilder
 import com.teovladusic.core.data.BuildConfig
+import com.teovladusic.core.data.network.ApiResultAdapterFactory
 import com.teovladusic.core.data.retrofit.RetrofitNetworkUserApi
-import com.teovladusic.core.network.api_result.ApiResultAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -54,6 +54,6 @@ internal object RetrofitModule {
 
     @Provides
     @Singleton
-    fun provideRetrofitNetworkUserApi(retrofit: Retrofit) =
+    fun provideRetrofitNetworkUserApi(retrofit: Retrofit): RetrofitNetworkUserApi =
         retrofit.create(RetrofitNetworkUserApi::class.java)
 }

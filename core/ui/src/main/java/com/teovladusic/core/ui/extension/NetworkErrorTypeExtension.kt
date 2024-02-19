@@ -1,8 +1,8 @@
 package com.teovladusic.core.ui.extension
 
+import com.teovladusic.core.common.R
 import com.teovladusic.core.common.UiText
 import com.teovladusic.core.domain.model.NetworkErrorType
-import com.teovladusic.core.common.R
 
 fun NetworkErrorType.getUiText(): UiText {
     return when (this) {

@@ -1,4 +1,4 @@
-package com.teovladusic.core.network.api_result
+package com.teovladusic.core.data.network
 
 import retrofit2.Call
 import retrofit2.CallAdapter

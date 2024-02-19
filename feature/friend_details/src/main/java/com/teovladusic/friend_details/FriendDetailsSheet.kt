@@ -61,12 +61,8 @@ internal fun FriendDetailsSheet(viewModel: FriendDetailsViewModel) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        val friend = state.friend
-
-        if (friend == null) {
-            Text(text = "An error occurred")
-        } else {
-            FriendDetails(friend)
+        state.friend?.let {
+            FriendDetails(it)
         }
     }
 }

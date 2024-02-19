@@ -30,7 +30,6 @@ rootProject.name = "SkratchAssignment"
 include(":app")
 include(":core")
 include(":core:designsystem")
-include(":core:network")
 include(":feature")
 include(":core:domain")
 include(":core:data")

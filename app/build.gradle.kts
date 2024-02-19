@@ -58,7 +58,6 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:domain"))
-    implementation(project(":core:network"))
     implementation(project(":core:ui"))
 
     implementation(project(":feature:friend_details"))

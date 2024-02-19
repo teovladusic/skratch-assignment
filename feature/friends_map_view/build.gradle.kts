@@ -73,6 +73,8 @@ dependencies {
     // Glide images
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
+    implementation("androidx.asynclayoutinflater:asynclayoutinflater:1.0.0")
+
     testImplementation(libs.junit)
 
     androidTestImplementation(libs.androidx.test.ext.junit)
