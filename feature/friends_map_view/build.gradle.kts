@@ -71,9 +71,9 @@ dependencies {
     implementation(libs.coil.compose)
 
     // Glide images
-    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation(libs.glide)
 
-    implementation("androidx.asynclayoutinflater:asynclayoutinflater:1.0.0")
+    implementation(libs.androidx.asynclayoutinflater)
 
     testImplementation(libs.junit)
 

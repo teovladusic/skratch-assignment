@@ -19,3 +19,13 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-dontwarn com.tobrun.datacompat.annotation.Default
+
+-keep class com.teovladusic.core.data.model.** { *; }
+-keep class com.teovladusic.core.data.network.** { *; }
+
+-keep,allowobfuscation,allowshrinking interface retrofit2.Call
+-keep,allowobfuscation,allowshrinking class retrofit2.Response
+
+-keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
