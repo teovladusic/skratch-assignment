@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="my_friends">My Friends</string>
+    <string name="no_of_users">No. of users</string>
+    <string name="friends_loading_text">Finding your friends</string>
+    <string name="registered_on">Registered on</string>
+    <string name="request_not_valid">Request is not valid</string>
+    <string name="you_dont_have_permission">You don\'t have persmission</string>
+    <string name="not_found">Not found</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="error">Error</string>
+</resources>
