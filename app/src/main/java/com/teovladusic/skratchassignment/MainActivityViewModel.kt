@@ -1,5 +1,9 @@
 package com.teovladusic.skratchassignment
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teovladusic.core.common.R
@@ -23,6 +27,13 @@ class MainActivityViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     val friendsData = friendRepository.friendsDataFlow
+
+    var friendsCountTextFieldState by mutableStateOf(TextFieldValue(DEFAULT_FRIENDS_COUNT.toString()))
+        private set
+
+    fun onFriendsCountTextChanged(value: TextFieldValue) {
+        friendsCountTextFieldState = value
+    }
 
     init {
         fetchFriends(DEFAULT_FRIENDS_COUNT)
@@ -48,13 +59,13 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
-    fun onFriendsCountChange(value: String) {
-        val count = value.toIntOrNull() ?: DEFAULT_FRIENDS_COUNT
-        fetchFriends(count)
-    }
-
     fun dismissError() {
         _state.update { it.copy(errorMessage = null) }
+    }
+
+    fun confirmNumberOfUsers() {
+        val count = friendsCountTextFieldState.text.toIntOrNull() ?: DEFAULT_FRIENDS_COUNT
+        fetchFriends(count)
     }
 
     companion object {

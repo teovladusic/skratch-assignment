@@ -8,8 +8,8 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -20,16 +20,18 @@ import com.teovladusic.core.designsystem.theme.title2Book
 @Composable
 fun SkratchNumberField(
     modifier: Modifier,
-    value: String,
+    value: TextFieldValue,
     keyboardType: KeyboardType = KeyboardType.Number,
     placeholder: String? = null,
     onDone: () -> Unit = {},
-    onValueChange: (String) -> Unit
+    onFocus: (Boolean) -> Unit = {},
+    onValueChange: (TextFieldValue) -> Unit
 ) {
     TextField(
-        modifier = modifier,
-        value = TextFieldValue(value, selection = TextRange(value.length)),
-        onValueChange = { onValueChange(it.text) },
+        modifier = modifier
+            .onFocusChanged { onFocus(it.hasFocus) },
+        value = value,
+        onValueChange = onValueChange,
         keyboardOptions = KeyboardOptions(
             keyboardType = keyboardType,
             imeAction = ImeAction.Done

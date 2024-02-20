@@ -27,6 +27,7 @@ lottie = "6.3.0"
 playServicesLocation = "21.1.0"
 glide = "4.16.0"
 androidx-asynclayoutinflater = "1.0.0"
+compose-material = "1.6.1"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -63,6 +64,7 @@ lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" 
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 androidx-asynclayoutinflater = { module = "androidx.asynclayoutinflater:asynclayoutinflater", version.ref = "androidx-asynclayoutinflater" }
+compose-material = { module = "androidx.compose.material:material", version.ref = "compose-material" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

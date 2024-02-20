@@ -73,6 +73,10 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
+    implementation(libs.material)
+    implementation(libs.compose.material)
+
+    implementation(libs.androidx.navigation.compose)
 
     // Dagger Hilt
     ksp(libs.dagger.hilt.compiler)

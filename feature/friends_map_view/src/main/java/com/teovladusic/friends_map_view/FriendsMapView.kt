@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.util.AttributeSet
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater
@@ -15,6 +16,7 @@ import com.mapbox.maps.CameraChangedCallback
 import com.mapbox.maps.CameraState
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
+import com.mapbox.maps.TransitionOptions
 import com.mapbox.maps.extension.style.expressions.dsl.generated.get
 import com.mapbox.maps.extension.style.expressions.dsl.generated.toNumber
 import com.mapbox.maps.extension.style.expressions.generated.Expression
@@ -32,6 +34,7 @@ import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.logo.logo
 import com.mapbox.maps.plugin.scalebar.scalebar
 import com.mapbox.maps.toCameraOptions
+import com.mapbox.maps.viewannotation.OnViewAnnotationUpdatedListener
 import com.mapbox.maps.viewannotation.annotatedLayerFeature
 import com.mapbox.maps.viewannotation.viewAnnotationOptions
 import kotlinx.coroutines.CoroutineScope
@@ -68,6 +71,7 @@ class FriendsMapView(
         private const val CLUSTER_RADIUS = 75L
         private const val POINTS_COUNT_TEXT_SIZE = 17.0
         private const val CLUSTERED_SYMBOL_LAYER_IMAGE_ID = "circle-white"
+        private const val FADE_IN_ANIM_DURATION = 500L
     }
 
     private var features = emptyList<Feature>()
@@ -75,6 +79,9 @@ class FriendsMapView(
     init {
         configureMapElements()
         mapboxMap.loadStyle(Style.OUTDOORS) { style ->
+            style.setStyleTransition(
+                TransitionOptions.Builder().enablePlacementTransitions(true).build()
+            )
             style.setProjection(Projection(ProjectionName.MERCATOR))
 
             style.clear()
@@ -82,6 +89,19 @@ class FriendsMapView(
             style.addSymbolLayerIfNeeded()
             addViewAnnotations(features)
         }
+
+        viewAnnotationManager.addOnViewAnnotationUpdatedListener(object :
+            OnViewAnnotationUpdatedListener {
+            override fun onViewAnnotationVisibilityUpdated(
+                view: View,
+                visible: Boolean
+            ) {
+                if (visible) {
+                    view.alpha = 0f
+                    view.animate().setDuration(FADE_IN_ANIM_DURATION).alpha(1f).start()
+                }
+            }
+        })
     }
 
     private fun configureMapElements() {

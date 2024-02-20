@@ -82,7 +82,7 @@ private fun FriendDetails(friend: Friend) {
     FriendInfoContainer {
         FriendInformationItem(
             icon = painterResource(id = R.drawable.ic_balloon),
-            text = "${friend.gender.replaceFirstChar { it.uppercase() }} ${friend.age}",
+            text = "${friend.gender.replaceFirstChar { it.uppercase() }}, ${friend.age}",
             label = friend.birthday?.format()
         )
     }

@@ -7,6 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
@@ -18,12 +20,16 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
@@ -47,6 +53,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -62,8 +70,8 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.google.accompanist.navigation.material.BottomSheetNavigator
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
-import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.teovladusic.core.common.R
 import com.teovladusic.core.designsystem.components.SimpleErrorDialog
 import com.teovladusic.core.designsystem.components.SkratchNumberField
@@ -82,14 +90,21 @@ class MainActivity : ComponentActivity() {
 
     private val viewModel: MainActivityViewModel by viewModels()
 
-    @OptIn(ExperimentalMaterialNavigationApi::class)
+    @OptIn(
+        ExperimentalMaterialNavigationApi::class,
+        ExperimentalMaterialApi::class
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             SkratchAssignmentTheme {
-                // A surface container using the 'background' color from the theme
-                val bottomSheetNavigator = rememberBottomSheetNavigator()
+                val sheetState = rememberModalBottomSheetState(
+                    initialValue = ModalBottomSheetValue.Hidden,
+                    skipHalfExpanded = true
+                )
+                val bottomSheetNavigator = remember { BottomSheetNavigator(sheetState) }
+
                 val navController = rememberNavController(bottomSheetNavigator)
                 val backStackEntry = navController.currentBackStackEntryAsState()
 
@@ -104,39 +119,36 @@ class MainActivity : ComponentActivity() {
                     )
                 }
 
+                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Box(modifier = Modifier.fillMaxSize()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .windowInsetsPadding(WindowInsets.navigationBars)
+                    ) {
                         SkratchAssignmentNavHost(bottomSheetNavigator, navController)
 
-                        var showNumberOfUsersField by rememberSaveable {
-                            mutableStateOf(false)
-                        }
-
-                        if (backStackEntry.value?.destination.isAnyTopLevelDestinationInHierarchy()) {
-                            TabsSwitcher(
-                                modifier = Modifier
-                                    .align(Alignment.BottomStart)
-                                    .padding(horizontal = 24.dp, vertical = 32.dp),
-                                currentDestination = backStackEntry.value?.destination,
-                                onNavigateToDestination = {
-                                    navController.navigateToTopLevelDestination(it)
-                                }
-                            )
-
-                            FriendsCount(
-                                count = friendsData.friendsCount,
-                                showNumberOfUsersField = showNumberOfUsersField,
-                                onButtonClick = { value ->
-                                    if (showNumberOfUsersField) {
-                                        value?.let { viewModel.onFriendsCountChange(it) }
-                                    }
-
-                                    showNumberOfUsersField = !showNumberOfUsersField
-                                },
-                            )
+                        AnimatedVisibility(
+                            visible = backStackEntry.value?.destination
+                                .isAnyTopLevelDestinationInHierarchy(),
+                            enter = fadeIn(),
+                            exit = fadeOut(),
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .fillMaxWidth()
+                        ) {
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                FloatingContent(
+                                    currentDestination = backStackEntry.value?.destination,
+                                    onNavigateToDestination = {
+                                        navController.navigateToTopLevelDestination(it)
+                                    },
+                                    friendsCount = friendsData.friendsCount
+                                )
+                            }
                         }
 
                         LoadingIndicator(isLoading = state.isLoading)
@@ -144,6 +156,39 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    @Composable
+    private fun BoxScope.FloatingContent(
+        currentDestination: NavDestination?,
+        onNavigateToDestination: (TopLevelDestination) -> Unit,
+        friendsCount: Int
+    ) {
+        var showNumberOfUsersField by rememberSaveable {
+            mutableStateOf(false)
+        }
+
+        TabsSwitcher(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(horizontal = 24.dp, vertical = 32.dp),
+            currentDestination = currentDestination,
+            onNavigateToDestination = onNavigateToDestination
+        )
+
+        FriendsCount(
+            count = friendsCount,
+            showNumberOfFriendsField = showNumberOfUsersField,
+            onCountButtonClick = {
+                if (showNumberOfUsersField) {
+                    viewModel.confirmNumberOfUsers()
+                }
+                showNumberOfUsersField = !showNumberOfUsersField
+            },
+            textFieldValue = viewModel.friendsCountTextFieldState,
+            onValueChange = viewModel::onFriendsCountTextChanged,
+            onDismissClick = { showNumberOfUsersField = false }
+        )
     }
 
     private fun NavController.navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
@@ -171,8 +216,8 @@ class MainActivity : ComponentActivity() {
 private fun LoadingIndicator(isLoading: Boolean) {
     AnimatedVisibility(
         visible = isLoading,
-        enter = slideInVertically(initialOffsetY = { fullHeight -> -fullHeight }),
-        exit = slideOutVertically(targetOffsetY = { fullHeight -> -fullHeight })
+        enter = slideInVertically(initialOffsetY = { fullHeight -> -fullHeight + 10 }),
+        exit = slideOutVertically(targetOffsetY = { fullHeight -> -fullHeight + 10 })
     ) {
         Box(
             modifier = Modifier
@@ -271,61 +316,59 @@ private fun NavDestination?.isAnyTopLevelDestinationInHierarchy(): Boolean {
 @Composable
 private fun BoxScope.FriendsCount(
     count: Int,
-    showNumberOfUsersField: Boolean,
-    onButtonClick: (String?) -> Unit
+    textFieldValue: TextFieldValue,
+    showNumberOfFriendsField: Boolean,
+    onValueChange: (TextFieldValue) -> Unit,
+    onCountButtonClick: () -> Unit,
+    onDismissClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .align(Alignment.BottomEnd)
             .fillMaxSize()
             .then(
-                if (showNumberOfUsersField) {
+                if (showNumberOfFriendsField) {
                     val color = Color.Black.copy(alpha = .3f)
-                    Modifier.clickableWithBackground(color, color) { onButtonClick(null) }
+                    Modifier.clickableWithBackground(color, color) {
+                        onDismissClick()
+                    }
                 } else Modifier
             ),
         horizontalAlignment = Alignment.End,
         verticalArrangement = Arrangement.Bottom
     ) {
-        var value by rememberSaveable {
-            mutableStateOf(count.toString())
-        }
-
-        val resetValue = {
-            val int = value.toIntOrNull() ?: MainActivityViewModel.DEFAULT_FRIENDS_COUNT
-            value = int.toString()
-        }
-
         CountButton(
-            showNumberOfUsersField = showNumberOfUsersField,
+            showNumberOfUsersField = showNumberOfFriendsField,
             count = count,
-            onClick = {
-                onButtonClick(value)
-                resetValue()
-            }
+            onClick = onCountButtonClick
         )
 
         val focusRequester = remember { FocusRequester() }
 
-        AnimatedVisibility(visible = showNumberOfUsersField) {
+        AnimatedVisibility(visible = showNumberOfFriendsField) {
             SkratchNumberField(
-                value = value,
-                onValueChange = { value = it },
+                value = textFieldValue,
+                onValueChange = onValueChange,
                 modifier = Modifier
                     .background(Color.White)
                     .padding(vertical = 8.dp) // Required padding is 24, native TextField has 16, add 8 to match design
                     .fillMaxWidth()
                     .focusRequester(focusRequester),
                 placeholder = stringResource(id = R.string.no_of_users),
-                onDone = {
-                    onButtonClick(value)
-                    resetValue()
+                onDone = onCountButtonClick,
+                onFocus = { hasFocus ->
+                    if (hasFocus) {
+                        val value = textFieldValue.copy(
+                            selection = TextRange(0, textFieldValue.text.length)
+                        )
+                        onValueChange(value)
+                    }
                 }
             )
         }
 
-        LaunchedEffect(key1 = showNumberOfUsersField) {
-            if (showNumberOfUsersField) {
+        LaunchedEffect(key1 = showNumberOfFriendsField) {
+            if (showNumberOfFriendsField) {
                 focusRequester.requestFocus()
             }
         }
